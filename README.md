@@ -1,3 +1,3 @@
 # Compras Pizzas
 
-Projeto para praticarJavscript básico do curso B7Web
+Projeto para praticar Javascript básico do curso B7Web.
