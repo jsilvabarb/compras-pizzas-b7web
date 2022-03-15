@@ -1,3 +1,5 @@
+let modalQuantify = 1
+
 const select = (element) => {
   return document.querySelector(element)
 }
@@ -9,6 +11,7 @@ pizzaJson.map((pizza, index) => {
 
   let pizzaItem = select('.models .pizza-item').cloneNode(true)
 
+  pizzaItem.setAttribute('data-key', index);
   pizzaItem.querySelector('.pizza-item--img img').src = pizza.img
   pizzaItem.querySelector('.pizza-item--price').innerHTML = `R$ ${pizza.price.toFixed(2)}`
   pizzaItem.querySelector('.pizza-item--name').innerHTML = pizza.name
@@ -16,6 +19,27 @@ pizzaJson.map((pizza, index) => {
 
   pizzaItem.querySelector('a').addEventListener('click', (e) => {
     e.preventDefault()
+
+    let key = e.target.closest('.pizza-item').getAttribute('data-key')
+    modalQuantify = 1
+
+    select('.pizzaBig img').src = pizzaJson[key].img
+    select('.pizzaInfo h1').innerHTML = pizzaJson[key].name
+    select('.pizzaInfo--desc').innerHTML = pizzaJson[key].description
+    select('.pizzaInfo--actualPrice').innerHTML = `R$ ${pizzaJson[key].price.toFixed(2)}`
+    select('.pizzaInfo--size.selected').classList.remove('selected')
+    
+    selectAll('.pizzaInfo--size').forEach((size, index) => {
+      
+      if(index == 2) {
+        size.classList.add('selected')
+      }
+
+      select('.pizzaInfo--qt').innerHTML = modalQuantify
+
+      size.querySelector('span').innerHTML = pizzaJson[key].sizes[index]
+
+    })
 
     select('.pizzaWindowArea').style.opacity = 0
     select('.pizzaWindowArea').style.display = 'flex'
