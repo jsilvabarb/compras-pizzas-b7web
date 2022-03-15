@@ -52,3 +52,42 @@ pizzaJson.map((pizza, index) => {
   select('.pizza-area').append( pizzaItem )
 
 })
+
+const closePizzaWindowArea = () => {
+  select('.pizzaWindowArea').style.opacity = 0
+  setTimeout(() => {
+    select('.pizzaWindowArea').style.display = 'none'
+  }, 500)
+}
+
+selectAll('.pizzaInfo--cancelButton, .pizzaInfo--cancelMobileButton').forEach((item) => {
+  item.addEventListener('click', closePizzaWindowArea)
+})
+
+select('.pizzaInfo--qtmenos').addEventListener('click', () => {
+
+  if(modalQuantify > 1) {
+    modalQuantify--;
+  }
+  select('.pizzaInfo--qt').innerHTML = modalQuantify
+
+})
+
+select('.pizzaInfo--qtmais').addEventListener('click', () => {
+  modalQuantify++;
+  select('.pizzaInfo--qt').innerHTML = modalQuantify
+
+})
+
+selectAll('.pizzaInfo--size').forEach((size, index) => {
+
+  size.addEventListener('click', (e) => {
+    select('.pizzaInfo--size.selected').classList.remove('selected')
+    size.classList.add('selected')
+  })
+
+})
+
+select('.pizzaInfo--addButton').addEventListener('click', () => {
+
+})
