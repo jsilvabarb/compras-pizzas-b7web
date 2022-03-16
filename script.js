@@ -70,13 +70,17 @@ selectAll('.pizzaInfo--cancelButton, .pizzaInfo--cancelMobileButton').forEach((i
 select('.pizzaInfo--qtmenos').addEventListener('click', () => {
 
   if(modalQuantify > 1) {
+
     modalQuantify--;
+
   }
+  
   select('.pizzaInfo--qt').innerHTML = modalQuantify
 
 })
 
 select('.pizzaInfo--qtmais').addEventListener('click', () => {
+
   modalQuantify++;
   select('.pizzaInfo--qt').innerHTML = modalQuantify
 
@@ -85,8 +89,10 @@ select('.pizzaInfo--qtmais').addEventListener('click', () => {
 selectAll('.pizzaInfo--size').forEach((size, index) => {
 
   size.addEventListener('click', (e) => {
+
     select('.pizzaInfo--size.selected').classList.remove('selected')
     size.classList.add('selected')
+
   })
 
 })
@@ -94,22 +100,104 @@ selectAll('.pizzaInfo--size').forEach((size, index) => {
 select('.pizzaInfo--addButton').addEventListener('click', () => {
 
   let size = parseInt(select('.pizzaInfo--size.selected').getAttribute('data-key'))
-
   let identifier = pizzaJson[modalKey].id+'@'+size
-
   let key = cart.findIndex((item) => item.identifier == identifier)
 
   if (key > -1) {
+
     cart[key].qtd += modalQuantify
+
   } else {
+
     cart.push({
       identifier,
       id:pizzaJson[modalKey].id,
       size,
       qtd:modalQuantify
     })
+
   }
 
+  updateCart()
   closePizzaWindowArea()
 
 })
+
+const updateCart = () => {
+
+  if(cart.length > 0) {
+
+    select('aside').classList.add('show')
+    select('.cart').innerHTML = ''
+
+    let subtotal = 0
+    let desconto = 0
+    let total = 0
+
+    for(let i in cart) {
+
+      let pizzaItem = pizzaJson.find((item) => item.id == cart[i].id)
+      subtotal += pizzaItem.price * cart[i].qtd
+
+      let cartItem = select('.models .cart--item').cloneNode(true)
+      let pizzaSizeName;
+
+      switch(cart[i].size) {
+
+        case 0:
+          pizzaSizeName = 'P'
+          break
+        case 1:
+          pizzaSizeName = 'M'
+          break
+        case 2:
+          pizzaSizeName = 'G'
+          break
+
+      }
+
+      let pizzaName = `${pizzaItem.name}, (${pizzaSizeName})`
+
+      cartItem.querySelector('img').src = pizzaItem.img
+      cartItem.querySelector('.cart--item-nome').innerHTML = pizzaName
+      cartItem.querySelector('.cart--item--qt').innerHTML = cart[i].qtd
+      cartItem.querySelector('.cart--item-qtmais').addEventListener('click', () => {
+
+        cart[i].qtd++
+        updateCart()
+
+      })
+      cartItem.querySelector('.cart--item-qtmenos').addEventListener('click', () => {
+
+        if(cart[i].qtd > 1) {
+
+          cart[i].qtd--
+
+        } else {
+
+          cart.splice(i, 1)
+
+        }
+
+        updateCart()
+
+      })
+
+      select('.cart').append(cartItem)
+
+    }
+
+    desconto = subtotal * 0.1
+    total = subtotal - desconto
+
+    select('.subtotal span:last-child').innerHTML = `R$ ${subtotal.toFixed(2)}`
+    select('.desconto span:last-child').innerHTML = `R$ ${desconto.toFixed(2)}`
+    select('.total span:last-child').innerHTML = `R$ ${total.toFixed(2)}`
+
+  } else {
+
+    select('aside').classList.remove('show')
+
+  }
+
+}
