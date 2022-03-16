@@ -74,7 +74,7 @@ select('.pizzaInfo--qtmenos').addEventListener('click', () => {
     modalQuantify--;
 
   }
-  
+
   select('.pizzaInfo--qt').innerHTML = modalQuantify
 
 })
@@ -122,8 +122,21 @@ select('.pizzaInfo--addButton').addEventListener('click', () => {
   closePizzaWindowArea()
 
 })
+select('.menu-openner').addEventListener('click', () => {
+  if(cart.length > 0) {
+    
+    select('aside').style.left = '0vw'
+
+  }
+
+  select('.menu-closer').addEventListener('click', () => {
+    select('aside').style.left = '100vw'
+  })
+})
 
 const updateCart = () => {
+
+  select('.menu-openner span').innerHTML = cart.length
 
   if(cart.length > 0) {
 
@@ -197,6 +210,7 @@ const updateCart = () => {
   } else {
 
     select('aside').classList.remove('show')
+    select('aside').style.left = '100vw'
 
   }
 
